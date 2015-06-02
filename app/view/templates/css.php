@@ -1,0 +1,5 @@
+<?php
+	$styles =
+		[
+			'style',
+		];
