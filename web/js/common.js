@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('.shadow').on('click', function() {
+    $('.shadow').on('click', function () {
         location.href = '/shadow';
     });
 });

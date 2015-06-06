@@ -1,41 +1,47 @@
 <?php
-	namespace core\database;
-	class Db {
-		private $connections;
-		private static $instance;
+namespace core\database;
+class Db
+{
+    private static $instance;
+    private $connections;
 
-		private function __construct() {
-			$this->connections = [];
-		}
+    private function __construct()
+    {
+        $this->connections = [];
+    }
 
-		/**
-		 * @param string $driver
-		 * @return MysqlDbConnection
-		 */
-		private function getConnection($driver) {
-			if (!isset($this->connections[$driver]) || !is_object($this->connections[$driver])) {
-				$this->addConnection($driver);
-			}
+    /**
+     * @param string $driver
+     * @return mixed
+     */
+    public static function getInstance($driver = 'mysql')
+    {
+        if (!(self::$instance instanceof self)) {
+            self::$instance = new self();
+        }
 
-			return $this->connections[$driver];
-		}
+        return self::$instance->getConnection($driver);
+    }
 
-		private function addConnection($driver) {
-			$this->connections[$driver] = (new DbConnection($driver))->connect();
-		}
+    /**
+     * @param string $driver
+     * @return MysqlDbConnection
+     */
+    private function getConnection($driver)
+    {
+        if (!isset($this->connections[$driver]) || !is_object($this->connections[$driver])) {
+            $this->addConnection($driver);
+        }
 
-		/**
-		 * @param string $driver
-		 * @return mixed
-		 */
-		public static function getInstance($driver = 'mysql') {
-			if (!(self::$instance instanceof self)) {
-				self::$instance = new self();
-			}
+        return $this->connections[$driver];
+    }
 
-			return self::$instance->getConnection($driver);
-		}
+    private function addConnection($driver)
+    {
+        $this->connections[$driver] = (new DbConnection($driver))->connect();
+    }
 
-		private function __clone() {
-		}
-	}
+    private function __clone()
+    {
+    }
+}

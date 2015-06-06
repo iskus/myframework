@@ -42,40 +42,36 @@ require_once 'Zend/Validate/Hostname.php';
 class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
 {
 
-    const INVALID            = 'emailAddressInvalid';
-    const INVALID_HOSTNAME   = 'emailAddressInvalidHostname';
-    const INVALID_MX_RECORD  = 'emailAddressInvalidMxRecord';
-    const DOT_ATOM           = 'emailAddressDotAtom';
-    const QUOTED_STRING      = 'emailAddressQuotedString';
+    const INVALID = 'emailAddressInvalid';
+    const INVALID_HOSTNAME = 'emailAddressInvalidHostname';
+    const INVALID_MX_RECORD = 'emailAddressInvalidMxRecord';
+    const DOT_ATOM = 'emailAddressDotAtom';
+    const QUOTED_STRING = 'emailAddressQuotedString';
     const INVALID_LOCAL_PART = 'emailAddressInvalidLocalPart';
-
-    /**
-     * @var array
-     */
-    protected $_messageTemplates = array(
-        self::INVALID            => "'%value%' is not a valid email address in the basic format local-part@hostname",
-        self::INVALID_HOSTNAME   => "'%hostname%' is not a valid hostname for email address '%value%'",
-        self::INVALID_MX_RECORD  => "'%hostname%' does not appear to have a valid MX record for the email address '%value%'",
-        self::DOT_ATOM           => "'%localPart%' not matched against dot-atom format",
-        self::QUOTED_STRING      => "'%localPart%' not matched against quoted-string format",
-        self::INVALID_LOCAL_PART => "'%localPart%' is not a valid local part for email address '%value%'"
-    );
-
-    /**
-     * @var array
-     */
-    protected $_messageVariables = array(
-        'hostname'  => '_hostname',
-        'localPart' => '_localPart'
-    );
-
     /**
      * Local object for validating the hostname part of an email address
      *
      * @var Zend_Validate_Hostname
      */
     public $hostnameValidator;
-
+    /**
+     * @var array
+     */
+    protected $_messageTemplates = array(
+        self::INVALID => "'%value%' is not a valid email address in the basic format local-part@hostname",
+        self::INVALID_HOSTNAME => "'%hostname%' is not a valid hostname for email address '%value%'",
+        self::INVALID_MX_RECORD => "'%hostname%' does not appear to have a valid MX record for the email address '%value%'",
+        self::DOT_ATOM => "'%localPart%' not matched against dot-atom format",
+        self::QUOTED_STRING => "'%localPart%' not matched against quoted-string format",
+        self::INVALID_LOCAL_PART => "'%localPart%' is not a valid local part for email address '%value%'"
+    );
+    /**
+     * @var array
+     */
+    protected $_messageVariables = array(
+        'hostname' => '_hostname',
+        'localPart' => '_localPart'
+    );
     /**
      * Whether we check for a valid MX record via DNS
      *
@@ -100,8 +96,8 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
      * These bitfields are defined by the ALLOW_* constants in Zend_Validate_Hostname
      * The default is to allow DNS hostnames only
      *
-     * @param integer                $allow             OPTIONAL
-     * @param bool                   $validateMx        OPTIONAL
+     * @param integer $allow OPTIONAL
+     * @param bool $validateMx OPTIONAL
      * @param Zend_Validate_Hostname $hostnameValidator OPTIONAL
      * @return void
      */
@@ -109,31 +105,6 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
     {
         $this->setValidateMx($validateMx);
         $this->setHostnameValidator($hostnameValidator, $allow);
-    }
-
-    /**
-     * @param Zend_Validate_Hostname $hostnameValidator OPTIONAL
-     * @param int                    $allow             OPTIONAL
-     * @return void
-     */
-    public function setHostnameValidator(Zend_Validate_Hostname $hostnameValidator = null, $allow = Zend_Validate_Hostname::ALLOW_DNS)
-    {
-        if ($hostnameValidator === null) {
-            $hostnameValidator = new Zend_Validate_Hostname($allow);
-        }
-        $this->hostnameValidator = $hostnameValidator;
-    }
-
-    /**
-     * Whether MX checking via dns_get_mx is supported or not
-     *
-     * This currently only works on UNIX systems
-     *
-     * @return boolean
-     */
-    public function validateMxSupported()
-    {
-        return function_exists('dns_get_mx');
     }
 
     /**
@@ -145,7 +116,20 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
      */
     public function setValidateMx($allowed)
     {
-        $this->_validateMx = (bool) $allowed;
+        $this->_validateMx = (bool)$allowed;
+    }
+
+    /**
+     * @param Zend_Validate_Hostname $hostnameValidator OPTIONAL
+     * @param int $allow OPTIONAL
+     * @return void
+     */
+    public function setHostnameValidator(Zend_Validate_Hostname $hostnameValidator = null, $allow = Zend_Validate_Hostname::ALLOW_DNS)
+    {
+        if ($hostnameValidator === null) {
+            $hostnameValidator = new Zend_Validate_Hostname($allow);
+        }
+        $this->hostnameValidator = $hostnameValidator;
     }
 
     /**
@@ -161,7 +145,7 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
      */
     public function isValid($value)
     {
-        $valueString = (string) $value;
+        $valueString = (string)$value;
 
         $this->_setValue($valueString);
 
@@ -172,11 +156,11 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
         }
 
         $this->_localPart = $matches[1];
-        $this->_hostname  = $matches[2];
+        $this->_hostname = $matches[2];
 
         // Match hostname part
         $hostnameResult = $this->hostnameValidator->setTranslator($this->getTranslator())
-                               ->isValid($this->_hostname);
+            ->isValid($this->_hostname);
         if (!$hostnameResult) {
             $this->_error(self::INVALID_HOSTNAME);
 
@@ -222,9 +206,9 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
             // Quoted-string characters are: DQUOTE *([FWS] qtext/quoted-pair) [FWS] DQUOTE
             // qtext: Non white space controls, and the rest of the US-ASCII characters not
             //   including "\" or the quote character
-            $noWsCtl    = '\x01-\x08\x0b\x0c\x0e-\x1f\x7f';
-            $qtext      = $noWsCtl . '\x21\x23-\x5b\x5d-\x7e';
-            $ws         = '\x20\x09';
+            $noWsCtl = '\x01-\x08\x0b\x0c\x0e-\x1f\x7f';
+            $qtext = $noWsCtl . '\x21\x23-\x5b\x5d-\x7e';
+            $ws = '\x20\x09';
             if (preg_match('/^\x22([' . $ws . $qtext . '])*[$ws]?\x22$/', $this->_localPart)) {
                 $localResult = true;
             } else {
@@ -240,6 +224,18 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
         } else {
             return false;
         }
+    }
+
+    /**
+     * Whether MX checking via dns_get_mx is supported or not
+     *
+     * This currently only works on UNIX systems
+     *
+     * @return boolean
+     */
+    public function validateMxSupported()
+    {
+        return function_exists('dns_get_mx');
     }
 
 }

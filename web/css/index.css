@@ -10,6 +10,7 @@
     width: 90px;
     z-index: 100;
 }
+
 .my-mark:hover {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;

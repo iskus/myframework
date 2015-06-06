@@ -30,6 +30,44 @@
 class Zend_Loader
 {
     /**
+     * Returns TRUE if the $filename is readable, or FALSE otherwise.
+     * This function uses the PHP include_path, where PHP's is_readable()
+     * does not.
+     *
+     * @param string $filename
+     * @return boolean
+     */
+    public static function isReadable($filename)
+    {
+        if (!$fh = @fopen($filename, 'r', true)) {
+            return false;
+        }
+        @fclose($fh);
+        return true;
+    }
+
+    /**
+     * spl_autoload() suitable implementation for supporting class autoloading.
+     *
+     * Attach to spl_autoload() using the following:
+     * <code>
+     * spl_autoload_register(array('Zend_Loader', 'autoload'));
+     * </code>
+     *
+     * @param string $class
+     * @return string|false Class name on success; false on failure
+     */
+    public static function autoload($class)
+    {
+        try {
+            self::loadClass($class);
+            return $class;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
      * Loads a class from a PHP file.  The filename must be formatted
      * as "$class.php".
      *
@@ -43,7 +81,7 @@ class Zend_Loader
      * If the file was not found in the $dirs, or if no $dirs were specified,
      * it will attempt to load it from PHP's include_path.
      *
-     * @param string $class      - The full class name of a Zend component.
+     * @param string $class - The full class name of a Zend component.
      * @param string|array $dirs - OPTIONAL Either a path or an array of paths
      *                             to search.
      * @return void
@@ -105,10 +143,10 @@ class Zend_Loader
      *
      * If $once is TRUE, it will use include_once() instead of include().
      *
-     * @param  string        $filename
-     * @param  string|array  $dirs - OPTIONAL either a path or array of paths
+     * @param  string $filename
+     * @param  string|array $dirs - OPTIONAL either a path or array of paths
      *                       to search.
-     * @param  boolean       $once
+     * @param  boolean $once
      * @return boolean
      * @throws Zend_Exception
      */
@@ -148,40 +186,20 @@ class Zend_Loader
     }
 
     /**
-     * Returns TRUE if the $filename is readable, or FALSE otherwise.
-     * This function uses the PHP include_path, where PHP's is_readable()
-     * does not.
+     * Ensure that filename does not contain exploits
      *
-     * @param string   $filename
-     * @return boolean
+     * @param  string $filename
+     * @return void
+     * @throws Zend_Exception
      */
-    public static function isReadable($filename)
+    protected static function _securityCheck($filename)
     {
-        if (!$fh = @fopen($filename, 'r', true)) {
-            return false;
-        }
-        @fclose($fh);
-        return true;
-    }
-
-    /**
-     * spl_autoload() suitable implementation for supporting class autoloading.
-     *
-     * Attach to spl_autoload() using the following:
-     * <code>
-     * spl_autoload_register(array('Zend_Loader', 'autoload'));
-     * </code>
-     *
-     * @param string $class
-     * @return string|false Class name on success; false on failure
-     */
-    public static function autoload($class)
-    {
-        try {
-            self::loadClass($class);
-            return $class;
-        } catch (Exception $e) {
-            return false;
+        /**
+         * Security check
+         */
+        if (preg_match('/[^a-z0-9\\/\\\\_.-]/i', $filename)) {
+            require_once 'Zend/Exception.php';
+            throw new Zend_Exception('Security check: Illegal character in filename');
         }
     }
 
@@ -203,7 +221,7 @@ class Zend_Loader
 
         self::loadClass($class);
         $methods = get_class_methods($class);
-        if (!in_array('autoload', (array) $methods)) {
+        if (!in_array('autoload', (array)$methods)) {
             require_once 'Zend/Exception.php';
             throw new Zend_Exception("The class \"$class\" does not have an autoload() method");
         }
@@ -216,24 +234,6 @@ class Zend_Loader
     }
 
     /**
-     * Ensure that filename does not contain exploits
-     *
-     * @param  string $filename
-     * @return void
-     * @throws Zend_Exception
-     */
-    protected static function _securityCheck($filename)
-    {
-        /**
-         * Security check
-         */
-        if (preg_match('/[^a-z0-9\\/\\\\_.-]/i', $filename)) {
-            require_once 'Zend/Exception.php';
-            throw new Zend_Exception('Security check: Illegal character in filename');
-        }
-    }
-
-    /**
      * Attempt to include() the file.
      *
      * include() is not prefixed with the @ operator because if
@@ -242,7 +242,7 @@ class Zend_Loader
      *
      * Always set display_errors = Off on production servers!
      *
-     * @param  string  $filespec
+     * @param  string $filespec
      * @param  boolean $once
      * @return boolean
      * @deprecated Since 1.5.0; use loadFile() instead
@@ -252,7 +252,7 @@ class Zend_Loader
         if ($once) {
             return include_once $filespec;
         } else {
-            return include $filespec ;
+            return include $filespec;
         }
     }
 }

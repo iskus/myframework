@@ -37,14 +37,14 @@ class Zend_Validate_StringLength extends Zend_Validate_Abstract
 {
 
     const TOO_SHORT = 'stringLengthTooShort';
-    const TOO_LONG  = 'stringLengthTooLong';
+    const TOO_LONG = 'stringLengthTooLong';
 
     /**
      * @var array
      */
     protected $_messageTemplates = array(
         self::TOO_SHORT => "'%value%' is less than %min% characters long",
-        self::TOO_LONG  => "'%value%' is greater than %max% characters long"
+        self::TOO_LONG => "'%value%' is greater than %max% characters long"
     );
 
     /**
@@ -109,9 +109,9 @@ class Zend_Validate_StringLength extends Zend_Validate_Abstract
              */
             require_once 'Zend/Validate/Exception.php';
             throw new Zend_Validate_Exception("The minimum must be less than or equal to the maximum length, but $min >"
-                                            . " $this->_max");
+                . " $this->_max");
         }
-        $this->_min = max(0, (integer) $min);
+        $this->_min = max(0, (integer)$min);
         return $this;
     }
 
@@ -142,9 +142,9 @@ class Zend_Validate_StringLength extends Zend_Validate_Abstract
              */
             require_once 'Zend/Validate/Exception.php';
             throw new Zend_Validate_Exception("The maximum must be greater than or equal to the minimum length, but "
-                                            . "$max < $this->_min");
+                . "$max < $this->_min");
         } else {
-            $this->_max = (integer) $max;
+            $this->_max = (integer)$max;
         }
 
         return $this;
@@ -161,7 +161,7 @@ class Zend_Validate_StringLength extends Zend_Validate_Abstract
      */
     public function isValid($value)
     {
-        $valueString = (string) $value;
+        $valueString = (string)$value;
         $this->_setValue($valueString);
         $length = iconv_strlen($valueString);
         if ($length < $this->_min) {

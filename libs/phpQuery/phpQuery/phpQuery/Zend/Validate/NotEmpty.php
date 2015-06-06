@@ -55,10 +55,10 @@ class Zend_Validate_NotEmpty extends Zend_Validate_Abstract
      */
     public function isValid($value)
     {
-        $this->_setValue((string) $value);
+        $this->_setValue((string)$value);
 
         if (is_string($value)
-            && (('' === $value) 
+            && (('' === $value)
                 || preg_match('/^\s+$/s', $value))
         ) {
             $this->_error();

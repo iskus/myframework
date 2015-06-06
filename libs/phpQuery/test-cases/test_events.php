@@ -20,30 +20,29 @@ $inputs = $doc['form > *'];
 // 	create_function('$node', 'return $node->getAttribute("name");')
 // );
 $results = array();
-foreach($inputs as $node) {
-	$node = pq($node);
-	$name = $node->attr('name');
-	$results[$name] = false;
-	$node->change(
-		new CallbackReference($results[$name])
-	);
+foreach ($inputs as $node) {
+    $node = pq($node);
+    $name = $node->attr('name');
+    $results[$name] = false;
+    $node->change(
+        new CallbackReference($results[$name])
+    );
 }
 $inputs
-	->not('select,:checkbox,:radio')
-		->val('new value')
-	->end()
-	->filter('select')
-		->val('first')
-	->end()
-	->filter(':checkbox')
-		->val(array('foo'))
-	->end()
-	->filter(':radio')
-		->val(array('foo'))
-	->end()
-;
-foreach($results as $name => $result) {
-	print $result
-		? "Test for '$name' PASSED :)<br />\n"
-		: "Test for '$name' <strong>FAILED</strong> !!!<br />\n";
+    ->not('select,:checkbox,:radio')
+    ->val('new value')
+    ->end()
+    ->filter('select')
+    ->val('first')
+    ->end()
+    ->filter(':checkbox')
+    ->val(array('foo'))
+    ->end()
+    ->filter(':radio')
+    ->val(array('foo'))
+    ->end();
+foreach ($results as $name => $result) {
+    print $result
+        ? "Test for '$name' PASSED :)<br />\n"
+        : "Test for '$name' <strong>FAILED</strong> !!!<br />\n";
 }

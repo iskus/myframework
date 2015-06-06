@@ -37,16 +37,16 @@ class Zend_Validate_File_FilesSize extends Zend_Validate_File_Size
     /**
      * @const string Error constants
      */
-    const TOO_BIG      = 'fileFilesSizeTooBig';
-    const TOO_SMALL    = 'fileFilesSizeTooSmall';
+    const TOO_BIG = 'fileFilesSizeTooBig';
+    const TOO_SMALL = 'fileFilesSizeTooSmall';
     const NOT_READABLE = 'fileFilesSizeNotReadable';
 
     /**
      * @var array Error message templates
      */
     protected $_messageTemplates = array(
-        self::TOO_BIG      => "The files in sum exceed the maximum allowed size",
-        self::TOO_SMALL    => "All files are in sum smaller than required",
+        self::TOO_BIG => "The files in sum exceed the maximum allowed size",
+        self::TOO_SMALL => "All files are in sum smaller than required",
         self::NOT_READABLE => "One or more files can not be read"
     );
 
@@ -93,13 +93,13 @@ class Zend_Validate_File_FilesSize extends Zend_Validate_File_Size
      * It also accepts an array with the keys 'min' and 'max'
      *
      * @param  integer|array $min Minimum diskspace for all files
-     * @param  integer       $max Maximum diskspace for all files
+     * @param  integer $max Maximum diskspace for all files
      * @return void
      */
     public function __construct($min, $max = null)
     {
         $this->_files = array();
-        $this->_size  = 0;
+        $this->_size = 0;
         parent::__construct($min, $max);
     }
 
@@ -110,7 +110,7 @@ class Zend_Validate_File_FilesSize extends Zend_Validate_File_Size
      * not bigger than max (when max is not null).
      *
      * @param  string|array $value Real file to check for size
-     * @param  array        $file  File data from Zend_File_Transfer
+     * @param  array $file File data from Zend_File_Transfer
      * @return boolean
      */
     public function isValid($value, $file = null)
@@ -134,7 +134,7 @@ class Zend_Validate_File_FilesSize extends Zend_Validate_File_Size
             }
 
             // limited to 2GB files
-            $size         = @filesize($files);
+            $size = @filesize($files);
             $this->_size += $size;
             $this->_setValue($this->_size);
             if (($this->_max !== null) && ($this->_max < $this->_size)) {

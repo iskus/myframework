@@ -1,11 +1,14 @@
 <?php
-	namespace app\view;
-	use core\View as View;
+namespace app\view;
 
-	class Index extends View {
-		public function createContent() {
+use core\View as View;
 
-            //
-			parent::createContent();
-		}
-	}
+class Index extends View
+{
+    public function createContent()
+    {
+
+        //
+        parent::createContent();
+    }
+}

@@ -31,16 +31,16 @@ function base64_encode(data) {
 
     return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
 }
-$(document).ready(function() {
-    $('.form-control').each(function() {
+$(document).ready(function () {
+    $('.form-control').each(function () {
         var field = $(this);
         $(field.next()).val(base64_encode(field.val()));
-        field.on('change', function() {
+        field.on('change', function () {
             $(field.next()).val(base64_encode(field.val()));
         });
 
     });
-    $('#submitsh').on('click', function() {
+    $('#submitsh').on('click', function () {
         $.ajax({
             url: '',
             method: 'POST',
@@ -49,7 +49,7 @@ $(document).ready(function() {
                 passsh: base64_encode($('input[name=passsh]').val())
             },
             dataType: 'JSON',
-            success: function() {
+            success: function () {
 
             }
         });

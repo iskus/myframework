@@ -62,14 +62,14 @@ class Zend_Validate_InArray extends Zend_Validate_Abstract
     /**
      * Sets validator options
      *
-     * @param  array   $haystack
+     * @param  array $haystack
      * @param  boolean $strict
      * @return void
      */
     public function __construct(array $haystack, $strict = false)
     {
         $this->setHaystack($haystack)
-             ->setStrict($strict);
+            ->setStrict($strict);
     }
 
     /**

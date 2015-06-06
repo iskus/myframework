@@ -20,11 +20,11 @@ $doc['div ul'] = '<li>1</li> <li>2</li> <li>3</li>';
 $li = null;
 // almost everything can be a chain
 $doc['ul > li']
-	->addClass('my-new-class')
-	->filter(':last')
-		->addClass('last-li')
+    ->addClass('my-new-class')
+    ->filter(':last')
+    ->addClass('last-li')
 // save it anywhere in the chain
-		->toReference($li);
+    ->toReference($li);
 
 // SELECT DOCUMENT
 // pq(); is using selected document as default
@@ -35,12 +35,12 @@ $ul = pq('ul')->insertAfter('div');
 
 // ITERATE IT
 // all direct LIs from $ul
-foreach($ul['> li'] as $li) {
-	// iteration returns PLAIN dom nodes, NOT phpQuery objects
-	$tagName = $li->tagName;
-	$childNodes = $li->childNodes;
-	// so you NEED to wrap it within phpQuery, using pq();
-	pq($li)->addClass('my-second-new-class');
+foreach ($ul['> li'] as $li) {
+    // iteration returns PLAIN dom nodes, NOT phpQuery objects
+    $tagName = $li->tagName;
+    $childNodes = $li->childNodes;
+    // so you NEED to wrap it within phpQuery, using pq();
+    pq($li)->addClass('my-second-new-class');
 }
 
 // PRINT OUTPUT

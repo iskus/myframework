@@ -42,15 +42,13 @@ abstract class Zend_Uri
     protected $_scheme = '';
 
     /**
-     * Return a string representation of this URI.
+     * Zend_Uri and its subclasses cannot be instantiated directly.
+     * Use Zend_Uri::factory() to return a new Zend_Uri object.
      *
-     * @see    getUri()
-     * @return string
+     * @param string $scheme The scheme of the URI
+     * @param string $schemeSpecific The scheme-specific part of the URI
      */
-    public function __toString()
-    {
-        return $this->getUri();
-    }
+    abstract protected function __construct($scheme, $schemeSpecific = '');
 
     /**
      * Convenience function, checks that a $uri string is well-formed
@@ -85,8 +83,8 @@ abstract class Zend_Uri
     public static function factory($uri = 'http')
     {
         // Separate the scheme from the scheme-specific parts
-        $uri            = explode(':', $uri, 2);
-        $scheme         = strtolower($uri[0]);
+        $uri = explode(':', $uri, 2);
+        $scheme = strtolower($uri[0]);
         $schemeSpecific = isset($uri[1]) === true ? $uri[1] : '';
 
         if (strlen($scheme) === 0) {
@@ -126,6 +124,31 @@ abstract class Zend_Uri
     }
 
     /**
+     * Returns TRUE if this URI is valid, or FALSE otherwise.
+     *
+     * @return boolean
+     */
+    abstract public function valid();
+
+    /**
+     * Return a string representation of this URI.
+     *
+     * @see    getUri()
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getUri();
+    }
+
+    /**
+     * Return a string representation of this URI.
+     *
+     * @return string
+     */
+    abstract public function getUri();
+
+    /**
      * Get the URI's scheme
      *
      * @return string|false Scheme or false if no scheme is set.
@@ -138,27 +161,4 @@ abstract class Zend_Uri
             return false;
         }
     }
-
-    /**
-     * Zend_Uri and its subclasses cannot be instantiated directly.
-     * Use Zend_Uri::factory() to return a new Zend_Uri object.
-     *
-     * @param string $scheme         The scheme of the URI
-     * @param string $schemeSpecific The scheme-specific part of the URI
-     */
-    abstract protected function __construct($scheme, $schemeSpecific = '');
-
-    /**
-     * Return a string representation of this URI.
-     *
-     * @return string
-     */
-    abstract public function getUri();
-
-    /**
-     * Returns TRUE if this URI is valid, or FALSE otherwise.
-     *
-     * @return boolean
-     */
-    abstract public function valid();
 }

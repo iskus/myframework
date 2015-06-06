@@ -34,15 +34,15 @@ require_once 'Zend/Validate/Abstract.php';
  */
 class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
 {
-    const FALSE_TYPE   = 'fileMimeTypeFalse';
+    const FALSE_TYPE = 'fileMimeTypeFalse';
     const NOT_DETECTED = 'fileMimeTypeNotDetected';
     const NOT_READABLE = 'fileMimeTypeNotReadable';
-    
+
     /**
      * @var array
      */
     protected $_messageTemplates = array(
-        self::FALSE_TYPE   => "The file '%value%' has a false mimetype",
+        self::FALSE_TYPE => "The file '%value%' has a false mimetype",
         self::NOT_DETECTED => "The mimetype of file '%value%' has not been detected",
         self::NOT_READABLE => "The file '%value%' can not be read"
     );
@@ -74,36 +74,6 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
     public function __construct($mimetype)
     {
         $this->setMimeType($mimetype);
-    }
-
-    /**
-     * Returns the set mimetypes
-     *
-     * @param  boolean $asArray Returns the values as array, when false an concated string is returned
-     * @return integer
-     */
-    public function getMimeType($asArray = false)
-    {
-        $asArray   = (bool) $asArray;
-        $mimetype = (string) $this->_mimetype;
-        if ($asArray) {
-            $mimetype = explode(',', $mimetype);
-        }
-
-        return $mimetype;
-    }
-
-    /**
-     * Sets the mimetypes
-     *
-     * @param  string|array $mimetype The mimetypes to validate
-     * @return Zend_Validate_File_Extension Provides a fluent interface
-     */
-    public function setMimeType($mimetype)
-    {
-        $this->_mimetype = null;
-        $this->addMimeType($mimetype);
-        return $this;
     }
 
     /**
@@ -147,7 +117,7 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
      * mime types will be accepted like "image/gif", "image/jpeg" and so on.
      *
      * @param  string $value Real file to check for mimetype
-     * @param  array  $file  File data from Zend_File_Transfer
+     * @param  array $file File data from Zend_File_Transfer
      * @return boolean
      */
     public function isValid($value, $file = null)
@@ -170,7 +140,7 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
             return true;
         }
 
-        foreach($mimetype as $mime) {
+        foreach ($mimetype as $mime) {
             $types = explode('/', $info['type']);
             if (in_array($mime, $types)) {
                 return true;
@@ -196,5 +166,35 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
 
         $this->_error($errorType);
         return false;
+    }
+
+    /**
+     * Returns the set mimetypes
+     *
+     * @param  boolean $asArray Returns the values as array, when false an concated string is returned
+     * @return integer
+     */
+    public function getMimeType($asArray = false)
+    {
+        $asArray = (bool)$asArray;
+        $mimetype = (string)$this->_mimetype;
+        if ($asArray) {
+            $mimetype = explode(',', $mimetype);
+        }
+
+        return $mimetype;
+    }
+
+    /**
+     * Sets the mimetypes
+     *
+     * @param  string|array $mimetype The mimetypes to validate
+     * @return Zend_Validate_File_Extension Provides a fluent interface
+     */
+    public function setMimeType($mimetype)
+    {
+        $this->_mimetype = null;
+        $this->addMimeType($mimetype);
+        return $this;
     }
 }

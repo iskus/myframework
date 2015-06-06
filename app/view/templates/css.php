@@ -6,8 +6,8 @@
  *  or simple "css_filename", and others..
  *
  */
-	$styles =
-		[
-			'style',
-            'index',
-		];
+$styles =
+    [
+        'style',
+        'index',
+    ];

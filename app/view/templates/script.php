@@ -6,8 +6,8 @@
  *  or simple "mylibs/required_js_file", and others }.js"
  *
  */
-	$scripts =
-		[
-			'jquery/jquery',
-			'common'
-		];
+$scripts =
+    [
+        'jquery/jquery',
+        'common'
+    ];

@@ -44,28 +44,25 @@ class Zend_Validate_Alpha extends Zend_Validate_Abstract
      * Validation failure message key for when the value is an empty string
      */
     const STRING_EMPTY = 'stringEmpty';
-
-    /**
-     * Whether to allow white space characters; off by default
-     *
-     * @var boolean
-     */
-    public $allowWhiteSpace;
-
     /**
      * Alphabetic filter used for validation
      *
      * @var Zend_Filter_Alpha
      */
     protected static $_filter = null;
-
+    /**
+     * Whether to allow white space characters; off by default
+     *
+     * @var boolean
+     */
+    public $allowWhiteSpace;
     /**
      * Validation failure message template definitions
      *
      * @var array
      */
     protected $_messageTemplates = array(
-        self::NOT_ALPHA    => "'%value%' has not only alphabetic characters",
+        self::NOT_ALPHA => "'%value%' has not only alphabetic characters",
         self::STRING_EMPTY => "'%value%' is an empty string"
     );
 
@@ -77,7 +74,7 @@ class Zend_Validate_Alpha extends Zend_Validate_Abstract
      */
     public function __construct($allowWhiteSpace = false)
     {
-        $this->allowWhiteSpace = (boolean) $allowWhiteSpace;
+        $this->allowWhiteSpace = (boolean)$allowWhiteSpace;
     }
 
     /**
@@ -90,7 +87,7 @@ class Zend_Validate_Alpha extends Zend_Validate_Abstract
      */
     public function isValid($value)
     {
-        $valueString = (string) $value;
+        $valueString = (string)$value;
 
         $this->_setValue($valueString);
 

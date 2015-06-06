@@ -9,12 +9,12 @@ $testName = 'Scripts/example';
 $doc = phpQuery::newDocumentFile('test.html');
 $testResult = 10;
 if ($doc->script('example', 'p')->length == $testResult)
-	print "Test '$testName' PASSED :)";
+    print "Test '$testName' PASSED :)";
 else {
-	print "Test '$testName' <strong>FAILED</strong> !!! ";
-	print "<pre>";
-	var_dump($doc->whois());
-	print "</pre>\n";
+    print "Test '$testName' <strong>FAILED</strong> !!! ";
+    print "<pre>";
+    var_dump($doc->whois());
+    print "</pre>\n";
 }
 print "\n";
 
@@ -24,15 +24,15 @@ $testResult = 1;
 $url = 'http://code.google.com/p/phpquery/w/edit/MultiDocumentSupport';
 //phpQuery::ajaxAllowURL($url);
 $editor = phpQuery::newDocument('<div/>')
-	->script('google_login')
-	->location($url);
+    ->script('google_login')
+    ->location($url);
 if ($editor->find('textarea#content')->length == $testResult)
-	print "Test '$testName' PASSED :)";
+    print "Test '$testName' PASSED :)";
 else {
-	print "Test '$testName' <strong>FAILED</strong> !!! ";
-	print "<pre>";
-	var_dump($doc->whois());
-	print "</pre>\n";
+    print "Test '$testName' <strong>FAILED</strong> !!! ";
+    print "<pre>";
+    var_dump($doc->whois());
+    print "</pre>\n";
 }
 print "\n";
 ?>

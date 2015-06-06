@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Charset and document types test.
  *
@@ -9,16 +10,20 @@
  * - document fragments tests (with all 4 charset scenarios)
  *
  */
-class phpQuery {
-	static $defaultDocumentID;
-	static $debug = 0;
-	static $documents = array();
-	static $defaultCharset = 'utf-8';
-	static function debug($text) {
-		if (self::$debug)
-			print var_dump($text);
-	}
+class phpQuery
+{
+    static $defaultDocumentID;
+    static $debug = 0;
+    static $documents = array();
+    static $defaultCharset = 'utf-8';
+
+    static function debug($text)
+    {
+        if (self::$debug)
+            print var_dump($text);
+    }
 }
+
 require_once('../phpQuery/DOMDocumentWrapper.php');
 phpQuery::$debug = 2;
 
@@ -36,7 +41,7 @@ print '<meta http-equiv="Content-Type" content="text/html;charset=utf-8">';
 //	'text/html;charset=iso-8859-2'
 //);
 $htmlUtf = new DOMDocumentWrapper(
-	file_get_contents('document-types/document-utf8.html')
+    file_get_contents('document-types/document-utf8.html')
 );
 var_dump($htmlUtf->markup());
 //$htmlUtfNoCharset = new DOMDocumentWrapper(

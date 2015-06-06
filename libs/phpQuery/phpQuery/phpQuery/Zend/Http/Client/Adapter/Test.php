@@ -67,7 +67,8 @@ class Zend_Http_Client_Adapter_Test implements Zend_Http_Client_Adapter_Interfac
      *
      */
     public function __construct()
-    { }
+    {
+    }
 
     /**
      * Set the configuration array for the adapter
@@ -76,7 +77,7 @@ class Zend_Http_Client_Adapter_Test implements Zend_Http_Client_Adapter_Interfac
      */
     public function setConfig($config = array())
     {
-        if (! is_array($config)) {
+        if (!is_array($config)) {
             require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception(
                 '$config expects an array, ' . gettype($config) . ' recieved.');
@@ -90,28 +91,29 @@ class Zend_Http_Client_Adapter_Test implements Zend_Http_Client_Adapter_Interfac
     /**
      * Connect to the remote server
      *
-     * @param string  $host
-     * @param int     $port
+     * @param string $host
+     * @param int $port
      * @param boolean $secure
-     * @param int     $timeout
+     * @param int $timeout
      */
     public function connect($host, $port = 80, $secure = false)
-    { }
+    {
+    }
 
     /**
      * Send request to the remote server
      *
-     * @param string        $method
+     * @param string $method
      * @param Zend_Uri_Http $uri
-     * @param string        $http_ver
-     * @param array         $headers
-     * @param string        $body
+     * @param string $http_ver
+     * @param array $headers
+     * @param string $body
      * @return string Request as string
      */
     public function write($method, $uri, $http_ver = '1.1', $headers = array(), $body = '')
     {
         $host = $uri->getHost();
-            $host = (strtolower($uri->getScheme()) == 'https' ? 'sslv2://' . $host : $host);
+        $host = (strtolower($uri->getScheme()) == 'https' ? 'sslv2://' . $host : $host);
 
         // Build request headers
         $path = $uri->getPath();
@@ -148,7 +150,8 @@ class Zend_Http_Client_Adapter_Test implements Zend_Http_Client_Adapter_Interfac
      *
      */
     public function close()
-    { }
+    {
+    }
 
     /**
      * Set the HTTP response(s) to be returned by this adapter

@@ -37,32 +37,32 @@ class Zend_Validate_File_Upload extends Zend_Validate_Abstract
     /**@#+
      * @const string Error constants
      */
-    const INI_SIZE       = 'fileUploadErrorIniSize';
-    const FORM_SIZE      = 'fileUploadErrorFormSize';
-    const PARTIAL        = 'fileUploadErrorPartial';
-    const NO_FILE        = 'fileUploadErrorNoFile';
-    const NO_TMP_DIR     = 'fileUploadErrorNoTmpDir';
-    const CANT_WRITE     = 'fileUploadErrorCantWrite';
-    const EXTENSION      = 'fileUploadErrorExtension';
-    const ATTACK         = 'fileUploadErrorAttack';
+    const INI_SIZE = 'fileUploadErrorIniSize';
+    const FORM_SIZE = 'fileUploadErrorFormSize';
+    const PARTIAL = 'fileUploadErrorPartial';
+    const NO_FILE = 'fileUploadErrorNoFile';
+    const NO_TMP_DIR = 'fileUploadErrorNoTmpDir';
+    const CANT_WRITE = 'fileUploadErrorCantWrite';
+    const EXTENSION = 'fileUploadErrorExtension';
+    const ATTACK = 'fileUploadErrorAttack';
     const FILE_NOT_FOUND = 'fileUploadErrorFileNotFound';
-    const UNKNOWN        = 'fileUploadErrorUnknown';
+    const UNKNOWN = 'fileUploadErrorUnknown';
     /**@#-*/
 
     /**
      * @var array Error message templates
      */
     protected $_messageTemplates = array(
-        self::INI_SIZE       => "The file '%value%' exceeds the defined ini size",
-        self::FORM_SIZE      => "The file '%value%' exceeds the defined form size",
-        self::PARTIAL        => "The file '%value%' was only partially uploaded",
-        self::NO_FILE        => "The file '%value%' was not uploaded",
-        self::NO_TMP_DIR     => "No temporary directory was found for the file '%value%'",
-        self::CANT_WRITE     => "The file '%value%' can't be written",
-        self::EXTENSION      => "The extension returned an error while uploading the file '%value%'",
-        self::ATTACK         => "The file '%value%' was illegal uploaded, possible attack",
+        self::INI_SIZE => "The file '%value%' exceeds the defined ini size",
+        self::FORM_SIZE => "The file '%value%' exceeds the defined form size",
+        self::PARTIAL => "The file '%value%' was only partially uploaded",
+        self::NO_FILE => "The file '%value%' was not uploaded",
+        self::NO_TMP_DIR => "No temporary directory was found for the file '%value%'",
+        self::CANT_WRITE => "The file '%value%' can't be written",
+        self::EXTENSION => "The extension returned an error while uploading the file '%value%'",
+        self::ATTACK => "The file '%value%' was illegal uploaded, possible attack",
         self::FILE_NOT_FOUND => "The file '%value%' was not found",
-        self::UNKNOWN        => "Unknown error while uploading the file '%value%'"
+        self::UNKNOWN => "Unknown error while uploading the file '%value%'"
     );
 
     /**
@@ -166,7 +166,7 @@ class Zend_Validate_File_Upload extends Zend_Validate_Abstract
 
         foreach ($files as $file => $content) {
             $this->_value = $file;
-            switch($content['error']) {
+            switch ($content['error']) {
                 case 0:
                     if (!is_uploaded_file($content['tmp_name'])) {
                         $this->_error(self::ATTACK);

@@ -88,7 +88,7 @@ class Zend_Validate_File_Count extends Zend_Validate_Abstract
      * It also accepts an array with the keys 'min' and 'max'
      *
      * @param  integer|array $min Minimum file count
-     * @param  integer       $max Maximum file count
+     * @param  integer $max Maximum file count
      * @return void
      */
     public function __construct($min, $max = null)
@@ -138,7 +138,7 @@ class Zend_Validate_File_Count extends Zend_Validate_Abstract
     /**
      * Sets the minimum file count
      *
-     * @param  integer $min            The minimum file count
+     * @param  integer $min The minimum file count
      * @return Zend_Validate_File_Size Provides a fluent interface
      * @throws Zend_Validate_Exception When min is greater than max
      */
@@ -151,7 +151,7 @@ class Zend_Validate_File_Count extends Zend_Validate_Abstract
             throw new Zend_Validate_Exception('The minimum must be less than or equal to the maximum file count, but '
                 . " {$min} > {$this->_max}");
         } else {
-            $this->_min = max(0, (integer) $min);
+            $this->_min = max(0, (integer)$min);
         }
 
         return $this;
@@ -170,7 +170,7 @@ class Zend_Validate_File_Count extends Zend_Validate_Abstract
     /**
      * Sets the maximum file count
      *
-     * @param  integer|null $max       The maximum file count
+     * @param  integer|null $max The maximum file count
      * @throws Zend_Validate_Exception When max is smaller than min
      * @return Zend_Validate_StringLength Provides a fluent interface
      */
@@ -183,7 +183,7 @@ class Zend_Validate_File_Count extends Zend_Validate_Abstract
             throw new Zend_Validate_Exception("The maximum must be greater than or equal to the minimum file count, but "
                 . "{$max} < {$this->_min}");
         } else {
-            $this->_max = (integer) $max;
+            $this->_max = (integer)$max;
         }
 
         return $this;
@@ -197,7 +197,7 @@ class Zend_Validate_File_Count extends Zend_Validate_Abstract
      * must give all files with the first call, otherwise you will get an false.
      *
      * @param  string|array $value Filenames to check for count
-     * @param  array        $file  File data from Zend_File_Transfer
+     * @param  array $file File data from Zend_File_Transfer
      * @return boolean
      */
     public function isValid($value, $file = null)

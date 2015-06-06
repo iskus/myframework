@@ -51,8 +51,8 @@ class Zend_Validate_File_NotExists extends Zend_Validate_File_Exists
      *
      * Returns true if and only if the file does not exist in the set destinations
      *
-     * @param  string  $value Real file to check for
-     * @param  array   $file  File data from Zend_File_Transfer
+     * @param  string $value Real file to check for
+     * @param  array $file File data from Zend_File_Transfer
      * @return boolean
      */
     public function isValid($value, $file = null)
@@ -72,13 +72,13 @@ class Zend_Validate_File_NotExists extends Zend_Validate_File_Exists
             $check = true;
             if (file_exists($directory . DIRECTORY_SEPARATOR . $file['name'])) {
                 $this->_throw($file, self::DOES_EXIST);
-                return false; 
+                return false;
             }
         }
 
         if (!isset($check)) {
             $this->_throw($file, self::DOES_EXIST);
-            return false; 
+            return false;
         }
 
         return true;

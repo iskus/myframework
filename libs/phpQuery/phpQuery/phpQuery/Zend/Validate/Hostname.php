@@ -54,84 +54,55 @@ require_once 'Zend/Validate/Ip.php';
 class Zend_Validate_Hostname extends Zend_Validate_Abstract
 {
 
-    const IP_ADDRESS_NOT_ALLOWED  = 'hostnameIpAddressNotAllowed';
-    const UNKNOWN_TLD             = 'hostnameUnknownTld';
-    const INVALID_DASH            = 'hostnameDashCharacter';
+    const IP_ADDRESS_NOT_ALLOWED = 'hostnameIpAddressNotAllowed';
+    const UNKNOWN_TLD = 'hostnameUnknownTld';
+    const INVALID_DASH = 'hostnameDashCharacter';
     const INVALID_HOSTNAME_SCHEMA = 'hostnameInvalidHostnameSchema';
-    const UNDECIPHERABLE_TLD      = 'hostnameUndecipherableTld';
-    const INVALID_HOSTNAME        = 'hostnameInvalidHostname';
-    const INVALID_LOCAL_NAME      = 'hostnameInvalidLocalName';
-    const LOCAL_NAME_NOT_ALLOWED  = 'hostnameLocalNameNotAllowed';
-
+    const UNDECIPHERABLE_TLD = 'hostnameUndecipherableTld';
+    const INVALID_HOSTNAME = 'hostnameInvalidHostname';
+    const INVALID_LOCAL_NAME = 'hostnameInvalidLocalName';
+    const LOCAL_NAME_NOT_ALLOWED = 'hostnameLocalNameNotAllowed';
+    /**
+     * Allows Internet domain names (e.g., example.com)
+     */
+    const ALLOW_DNS = 1;
+    /**
+     * Allows IP addresses
+     */
+    const ALLOW_IP = 2;
+    /**
+     * Allows local network names (e.g., localhost, www.localdomain)
+     */
+    const ALLOW_LOCAL = 4;
+    /**
+     * Allows all types of hostnames
+     */
+    const ALLOW_ALL = 7;
     /**
      * @var array
      */
     protected $_messageTemplates = array(
-        self::IP_ADDRESS_NOT_ALLOWED  => "'%value%' appears to be an IP address, but IP addresses are not allowed",
-        self::UNKNOWN_TLD             => "'%value%' appears to be a DNS hostname but cannot match TLD against known list",
-        self::INVALID_DASH            => "'%value%' appears to be a DNS hostname but contains a dash (-) in an invalid position",
+        self::IP_ADDRESS_NOT_ALLOWED => "'%value%' appears to be an IP address, but IP addresses are not allowed",
+        self::UNKNOWN_TLD => "'%value%' appears to be a DNS hostname but cannot match TLD against known list",
+        self::INVALID_DASH => "'%value%' appears to be a DNS hostname but contains a dash (-) in an invalid position",
         self::INVALID_HOSTNAME_SCHEMA => "'%value%' appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'",
-        self::UNDECIPHERABLE_TLD      => "'%value%' appears to be a DNS hostname but cannot extract TLD part",
-        self::INVALID_HOSTNAME        => "'%value%' does not match the expected structure for a DNS hostname",
-        self::INVALID_LOCAL_NAME      => "'%value%' does not appear to be a valid local network name",
-        self::LOCAL_NAME_NOT_ALLOWED  => "'%value%' appears to be a local network name but local network names are not allowed"
+        self::UNDECIPHERABLE_TLD => "'%value%' appears to be a DNS hostname but cannot extract TLD part",
+        self::INVALID_HOSTNAME => "'%value%' does not match the expected structure for a DNS hostname",
+        self::INVALID_LOCAL_NAME => "'%value%' does not appear to be a valid local network name",
+        self::LOCAL_NAME_NOT_ALLOWED => "'%value%' appears to be a local network name but local network names are not allowed"
     );
-
     /**
      * @var array
      */
     protected $_messageVariables = array(
         'tld' => '_tld'
     );
-
-    /**
-     * Allows Internet domain names (e.g., example.com)
-     */
-    const ALLOW_DNS   = 1;
-
-    /**
-     * Allows IP addresses
-     */
-    const ALLOW_IP    = 2;
-
-    /**
-     * Allows local network names (e.g., localhost, www.localdomain)
-     */
-    const ALLOW_LOCAL = 4;
-
-    /**
-     * Allows all types of hostnames
-     */
-    const ALLOW_ALL   = 7;
-
-    /**
-     * Whether IDN domains are validated
-     *
-     * @var boolean
-     */
-    private $_validateIdn = true;
-
-    /**
-     * Whether TLDs are validated against a known list
-     *
-     * @var boolean
-     */
-    private $_validateTld = true;
-
     /**
      * Bit field of ALLOW constants; determines which types of hostnames are allowed
      *
      * @var integer
      */
     protected $_allow;
-
-    /**
-     * Bit field of CHECK constants; determines what additional hostname checks to make
-     *
-     * @var unknown_type
-     */
-    // protected $_check;
-
     /**
      * Array of valid top-level-domains
      *
@@ -164,19 +135,37 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
         'tz', 'ua', 'ug', 'uk', 'um', 'us', 'uy', 'uz', 'va', 'vc', 've',
         'vg', 'vi', 'vn', 'vu', 'wf', 'ws', 'ye', 'yt', 'yu', 'za', 'zm',
         'zw'
-        );
-
+    );
     /**
      * @var string
      */
     protected $_tld;
 
     /**
+     * Bit field of CHECK constants; determines what additional hostname checks to make
+     *
+     * @var unknown_type
+     */
+    // protected $_check;
+    /**
+     * Whether IDN domains are validated
+     *
+     * @var boolean
+     */
+    private $_validateIdn = true;
+    /**
+     * Whether TLDs are validated against a known list
+     *
+     * @var boolean
+     */
+    private $_validateTld = true;
+
+    /**
      * Sets validator options
      *
-     * @param integer          $allow       OPTIONAL Set what types of hostname to allow (default ALLOW_DNS)
-     * @param boolean          $validateIdn OPTIONAL Set whether IDN domains are validated (default true)
-     * @param boolean          $validateTld OPTIONAL Set whether the TLD element of a hostname is validated (default true)
+     * @param integer $allow OPTIONAL Set what types of hostname to allow (default ALLOW_DNS)
+     * @param boolean $validateIdn OPTIONAL Set whether IDN domains are validated (default true)
+     * @param boolean $validateTld OPTIONAL Set whether the TLD element of a hostname is validated (default true)
      * @param Zend_Validate_Ip $ipValidator OPTIONAL
      * @return void
      * @see http://www.iana.org/cctld/specifications-policies-cctlds-01apr02.htm  Technical Specifications for ccTLDs
@@ -234,9 +223,9 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
      *
      * @param boolean $allowed Set allowed to true to validate IDNs, and false to not validate them
      */
-    public function setValidateIdn ($allowed)
+    public function setValidateIdn($allowed)
     {
-        $this->_validateIdn = (bool) $allowed;
+        $this->_validateIdn = (bool)$allowed;
     }
 
     /**
@@ -246,9 +235,9 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
      *
      * @param boolean $allowed Set allowed to true to validate TLDs, and false to not validate them
      */
-    public function setValidateTld ($allowed)
+    public function setValidateTld($allowed)
     {
-        $this->_validateTld = (bool) $allowed;
+        $this->_validateTld = (bool)$allowed;
     }
 
     /**
@@ -276,7 +265,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
      */
     public function isValid($value)
     {
-        $valueString = (string) $value;
+        $valueString = (string)$value;
 
         $this->_setValue($valueString);
 
@@ -285,7 +274,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
             if (!($this->_allow & self::ALLOW_IP)) {
                 $this->_error(self::IP_ADDRESS_NOT_ALLOWED);
                 return false;
-            } else{
+            } else {
                 return true;
             }
         }
@@ -346,8 +335,9 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
 
                         // Check dash (-) does not start, end or appear in 3rd and 4th positions
                         if (strpos($domainPart, '-') === 0 ||
-                        (strlen($domainPart) > 2 && strpos($domainPart, '-', 2) == 2 && strpos($domainPart, '-', 3) == 3) ||
-                        strrpos($domainPart, '-') === strlen($domainPart) - 1) {
+                            (strlen($domainPart) > 2 && strpos($domainPart, '-', 2) == 2 && strpos($domainPart, '-', 3) == 3) ||
+                            strrpos($domainPart, '-') === strlen($domainPart) - 1
+                        ) {
 
                             $this->_error(self::INVALID_DASH);
                             $status = false;

@@ -58,7 +58,7 @@ class Zend_Validate_Digits extends Zend_Validate_Abstract
      * @var array
      */
     protected $_messageTemplates = array(
-        self::NOT_DIGITS   => "'%value%' contains not only digit characters",
+        self::NOT_DIGITS => "'%value%' contains not only digit characters",
         self::STRING_EMPTY => "'%value%' is an empty string"
     );
 
@@ -72,7 +72,7 @@ class Zend_Validate_Digits extends Zend_Validate_Abstract
      */
     public function isValid($value)
     {
-        $valueString = (string) $value;
+        $valueString = (string)$value;
 
         $this->_setValue($valueString);
 

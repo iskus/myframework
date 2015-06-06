@@ -1,8 +1,8 @@
 <?php
 //error_reporting(E_ALL);
 set_include_path(
-	get_include_path()
-	.':/home/bob/Sources/PHP/zend-framework/'
+    get_include_path()
+    . ':/home/bob/Sources/PHP/zend-framework/'
 );
 
 require_once('../phpQuery/phpQuery.php');
@@ -33,14 +33,14 @@ phpQuery::$ajaxAllowedHosts[] = 'www.google.com';
 
 $testName = 'Load';
 $test = phpQuery::newDocumentFile('test.html')
-	->find('div:first')
-	->load('http://wikipedia.org/ div[lang]');
+    ->find('div:first')
+    ->load('http://wikipedia.org/ div[lang]');
 if (pq('div[lang]')->size())
-	print "Test '$testName' PASSED :)";
+    print "Test '$testName' PASSED :)";
 else {
-	print "Test '$testName' <strong>FAILED</strong> !!! ";
-	print "<pre>";
-	print "</pre>\n";
+    print "Test '$testName' <strong>FAILED</strong> !!! ";
+    print "<pre>";
+    print "</pre>\n";
 }
 print "\n";
 

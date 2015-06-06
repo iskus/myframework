@@ -42,6 +42,39 @@ class Zend_Registry extends ArrayObject
     private static $_registry = null;
 
     /**
+     * Unset the default registry instance.
+     * Primarily used in tearDown() in unit tests.
+     * @returns void
+     */
+    public static function _unsetInstance()
+    {
+        self::$_registry = null;
+    }
+
+    /**
+     * getter method, basically same as offsetGet().
+     *
+     * This method can be called from an object of type Zend_Registry, or it
+     * can be called statically.  In the latter case, it uses the default
+     * static instance stored in the class.
+     *
+     * @param string $index - get the value associated with $index
+     * @return mixed
+     * @throws Zend_Exception if no entry is registerd for $index.
+     */
+    public static function get($index)
+    {
+        $instance = self::getInstance();
+
+        if (!$instance->offsetExists($index)) {
+            require_once 'Zend/Exception.php';
+            throw new Zend_Exception("No entry is registered for key '$index'");
+        }
+
+        return $instance->offsetGet($index);
+    }
+
+    /**
      * Retrieves the default registry instance.
      *
      * @return Zend_Registry
@@ -53,6 +86,16 @@ class Zend_Registry extends ArrayObject
         }
 
         return self::$_registry;
+    }
+
+    /**
+     * Initialize the default registry instance.
+     *
+     * @return void
+     */
+    protected static function init()
+    {
+        self::setInstance(new self::$_registryClassName());
     }
 
     /**
@@ -72,16 +115,6 @@ class Zend_Registry extends ArrayObject
 
         self::setClassName(get_class($registry));
         self::$_registry = $registry;
-    }
-
-    /**
-     * Initialize the default registry instance.
-     *
-     * @return void
-     */
-    protected static function init()
-    {
-        self::setInstance(new self::$_registryClassName());
     }
 
     /**
@@ -116,36 +149,14 @@ class Zend_Registry extends ArrayObject
     }
 
     /**
-     * Unset the default registry instance.
-     * Primarily used in tearDown() in unit tests.
-     * @returns void
-     */
-    public static function _unsetInstance()
-    {
-        self::$_registry = null;
-    }
-
-    /**
-     * getter method, basically same as offsetGet().
+     * @param string $index
+     * @returns mixed
      *
-     * This method can be called from an object of type Zend_Registry, or it
-     * can be called statically.  In the latter case, it uses the default
-     * static instance stored in the class.
-     *
-     * @param string $index - get the value associated with $index
-     * @return mixed
-     * @throws Zend_Exception if no entry is registerd for $index.
+     * Workaround for http://bugs.php.net/bug.php?id=40442 (ZF-960).
      */
-    public static function get($index)
+    public function offsetExists($index)
     {
-        $instance = self::getInstance();
-
-        if (!$instance->offsetExists($index)) {
-            require_once 'Zend/Exception.php';
-            throw new Zend_Exception("No entry is registered for key '$index'");
-        }
-
-        return $instance->offsetGet($index);
+        return array_key_exists($index, $this);
     }
 
     /**
@@ -179,17 +190,6 @@ class Zend_Registry extends ArrayObject
             return false;
         }
         return self::$_registry->offsetExists($index);
-    }
-
-    /**
-     * @param string $index
-     * @returns mixed
-     *
-     * Workaround for http://bugs.php.net/bug.php?id=40442 (ZF-960).
-     */
-    public function offsetExists($index)
-    {
-        return array_key_exists($index, $this);
     }
 
 }

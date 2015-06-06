@@ -3,8 +3,8 @@
 namespace app\view\shadow;
 
 
-
-class Login extends Shadow {
-	//public function createContent() {}
+class Login extends Shadow
+{
+    //public function createContent() {}
 
 }

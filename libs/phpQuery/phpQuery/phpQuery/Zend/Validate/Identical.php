@@ -34,7 +34,7 @@ class Zend_Validate_Identical extends Zend_Validate_Abstract
      * Error codes
      * @const string
      */
-    const NOT_SAME      = 'notSame';
+    const NOT_SAME = 'notSame';
     const MISSING_TOKEN = 'missingToken';
     /**#@-*/
 
@@ -43,7 +43,7 @@ class Zend_Validate_Identical extends Zend_Validate_Abstract
      * @var array
      */
     protected $_messageTemplates = array(
-        self::NOT_SAME      => 'Tokens do not match',
+        self::NOT_SAME => 'Tokens do not match',
         self::MISSING_TOKEN => 'No token was provided to match against',
     );
 
@@ -67,31 +67,9 @@ class Zend_Validate_Identical extends Zend_Validate_Abstract
     }
 
     /**
-     * Set token against which to compare
-     * 
-     * @param  string $token 
-     * @return Zend_Validate_Identical
-     */
-    public function setToken($token)
-    {
-        $this->_token = (string) $token;
-        return $this;
-    }
-
-    /**
-     * Retrieve token
-     * 
-     * @return string
-     */
-    public function getToken()
-    {
-        return $this->_token;
-    }
-
-    /**
      * Defined by Zend_Validate_Interface
      *
-     * Returns true if and only if a token has been set and the provided value 
+     * Returns true if and only if a token has been set and the provided value
      * matches that token.
      *
      * @param  string $value
@@ -107,11 +85,33 @@ class Zend_Validate_Identical extends Zend_Validate_Abstract
             return false;
         }
 
-        if ($value !== $token)  {
+        if ($value !== $token) {
             $this->_error(self::NOT_SAME);
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Retrieve token
+     *
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->_token;
+    }
+
+    /**
+     * Set token against which to compare
+     *
+     * @param  string $token
+     * @return Zend_Validate_Identical
+     */
+    public function setToken($token)
+    {
+        $this->_token = (string)$token;
+        return $this;
     }
 }

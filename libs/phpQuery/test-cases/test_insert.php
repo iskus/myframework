@@ -12,9 +12,9 @@ print $doc->find('p');
 $markup = "test<br />test<p>test p</p>";
 $doc['body > p:last']->append($markup);
 if ($doc['body > p:last p']->length == 1)
-	print "Test '{$testName}' PASSED :)";
+    print "Test '{$testName}' PASSED :)";
 else {
-	print "Test '{$testName}' <strong>FAILED</strong> !!! ";
-	print $doc->htmlOuter('htmlspecialchars');
+    print "Test '{$testName}' <strong>FAILED</strong> !!! ";
+    print $doc->htmlOuter('htmlspecialchars');
 }
 print "\n";
