@@ -9,5 +9,6 @@
 $scripts =
     [
         'jquery/jquery',
-        'common'
+        'common',
+        'index'
     ];
