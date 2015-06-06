@@ -1,14 +1,13 @@
 <?php
 	namespace app\controller;
-	use app\model\Product;
-	use app\model\Store;
 	use core\Controller;
+    use core\sources\UsefulData;
 
 
-	class Index extends Controller {
+    class Index extends Controller {
 
 		public function index() {
-			$aboutIp = \core\sources\UsefulData::occurrence('109.86.108.185');
+			$aboutIp = UsefulData::occurrence(UsefulData::getRequest('REMOTE_ADDR', 'server'));
 			$this->view->createContent();
 		}
 

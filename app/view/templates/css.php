@@ -2,4 +2,5 @@
 	$styles =
 		[
 			'style',
+            'index',
 		];

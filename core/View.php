@@ -11,6 +11,9 @@
 			$pathToTempl = PATH_TO_TEMPLATES;
 			if (App::$shadow == "shadow") $pathToTempl .= '/' . App::$shadow;
 			$this->page = \phpQuery::newDocumentFileHTML($pathToTempl . '/index.htm');
+            $this->page['header']->append(file_get_contents($pathToTempl . '/header.htm'));
+            $this->page['footer']->append(file_get_contents($pathToTempl . '/footer.htm'))
+            ->append($this->getMyMark());
 			if (is_file($this->template))
 				$this->page['#content']->append(file_get_contents($this->template));
 			if (App::$shadow != 'shadow') {
@@ -45,4 +48,8 @@
 
 			}
 		}
+
+        public function getMyMark() {
+            return pq('<div/>')->addClass('my-mark');
+        }
 	}
