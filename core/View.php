@@ -9,7 +9,9 @@
 			$this->template = PATH_TO_TEMPLATES
 			                  . strtolower(App::$controller . '/' . App::$action . '.htm');
 			$pathToTempl = PATH_TO_TEMPLATES;
-			if (App::$shadow == "shadow") $pathToTempl .= '/' . App::$shadow;
+			if (App::$shadow == "shadow") {
+                $pathToTempl .= '/' . App::$shadow;
+            }
 			$this->page = \phpQuery::newDocumentFileHTML($pathToTempl . '/index.htm');
             $this->page['header']->append(file_get_contents($pathToTempl . '/header.htm'));
             $this->page['footer']->append(file_get_contents($pathToTempl . '/footer.htm'))
