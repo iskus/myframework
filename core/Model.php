@@ -45,9 +45,9 @@ class Model
         return $this->Db->update((int)$id, $params);
     }
 
-    public function getEntitys($params = [])
+    public function getEntitys($params = [], $start = 0, $count = 0)
     {
-        return $this->Db->getRows($params);
+        return $this->Db->getRows($params, $start, $count);
     }
 
 }

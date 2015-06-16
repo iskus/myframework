@@ -17,7 +17,7 @@ class MysqlDbConnection extends \mysqli
             $values[$field] = $value;
         }
         $inc = "INSERT";
-        if ($values['replace'] === TRUE) {
+        if (isset($values['replace']) && $values['replace'] === TRUE) {
             unset($values['replace']);
             $inc = "REPLACE";
         }
@@ -47,9 +47,11 @@ class MysqlDbConnection extends \mysqli
 
     }
 
-    public function getRows($params = [])
+    public function getRows($params = [], $start = 0, $count = 0)
     {
         $where = '';
+        $limit = '';
+        if ($count) $limit .= 'LIMIT ' . $start . ', ' . $count;
         if (is_array($params) && !empty($params)) {
             $where = [];
             foreach ($params as $key => $val) {
@@ -57,8 +59,8 @@ class MysqlDbConnection extends \mysqli
             }
             $where = "WHERE " . implode(' AND ', $where);
         }
-        $query = "SELECT * FROM {$this->table} {$where}";
-
+        $query = "SELECT * FROM {$this->table} {$where} {$limit}";
+//var_dump($query);
         if (!$result = $this->query($query)) return FALSE;
 
         $out = [];
