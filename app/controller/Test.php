@@ -79,6 +79,7 @@ class Test extends Controller {
             $model->setDbTable('links');
 
             foreach ($elements as $element) {
+
                 $obj = new \stdClass();
                 $obj->link = "http://email.court.gov.ua" . pq($element)->attr('href');
                 $obj->replace = true;
