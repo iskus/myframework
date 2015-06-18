@@ -17,7 +17,7 @@ class MysqlDbConnection extends \mysqli
             $values[$field] = $value;
         }
         $inc = "INSERT";
-        if ($values['replace'] === TRUE) {
+        if (isset($values['replace']) && $values['replace'] === TRUE) {
             unset($values['replace']);
             $inc = "REPLACE";
         }
@@ -25,6 +25,29 @@ class MysqlDbConnection extends \mysqli
             . ") VALUES ('" . implode("','", $values) . "')";
         //echo $query;
         return $this->query($query);
+
+    }
+
+    public function multiInsert(array $objects)
+    {
+        $inc = "INSERT";
+        if (isset($objects['replace']) && $objects['replace'] === TRUE) {
+            unset($objects['replace']);
+            $inc = "REPLACE";
+        }
+        $query = "{$inc} INTO {$this->table} (" . implode(',', get_object_vars($objects[0]))
+            . ") VALUES ";
+        $values = [];
+        foreach ($objects as $obj) {
+            $vars = [];
+            foreach ($obj as $field => $var) {
+                $vars[$field] = $var;
+            }
+            $values[] = "('" . implode("','", $vars) . "')";
+        }
+        $query .= implode("','", $values);
+        echo $query;
+        //return $this->query($query);
 
     }
 
@@ -47,9 +70,11 @@ class MysqlDbConnection extends \mysqli
 
     }
 
-    public function getRows($params = [])
+    public function getRows($params = [], $start = 0, $count = 0)
     {
         $where = '';
+        $limit = '';
+        if ($count) $limit .= 'LIMIT ' . $start . ', ' . $count;
         if (is_array($params) && !empty($params)) {
             $where = [];
             foreach ($params as $key => $val) {
@@ -57,8 +82,8 @@ class MysqlDbConnection extends \mysqli
             }
             $where = "WHERE " . implode(' AND ', $where);
         }
-        $query = "SELECT * FROM {$this->table} {$where}";
-
+        $query = "SELECT * FROM {$this->table} {$where} {$limit}";
+//var_dump($query);
         if (!$result = $this->query($query)) return FALSE;
 
         $out = [];

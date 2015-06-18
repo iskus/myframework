@@ -3,7 +3,7 @@ namespace app\view;
 
 use core\View as View;
 
-class Index extends View
+class Test extends View
 {
     public function createContent()
     {

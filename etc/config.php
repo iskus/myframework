@@ -19,7 +19,7 @@ $mongoConfig = clone $mysqlConfig;
 $mysqlConfig->host = 'localhost';
 $mysqlConfig->user = 'root';
 $mysqlConfig->pass = '';
-$mysqlConfig->db = 'idiller';
+$mysqlConfig->db = 'bdyopta';
 $configCollection->offsetSet('mysql', $mysqlConfig);
 
 //	$mysqlConfig->host = 'mysql.hostinger.com.ua';

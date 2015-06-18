@@ -35,6 +35,11 @@ class Model
         return $this->Db->insert($obj);
     }
 
+    public function addEntitys(array $objects)
+    {
+        return $this->Db->multiInsert($objects);
+    }
+
     public function getEntity($id)
     {
         return $this->Db->getRow((int)$id);
@@ -45,9 +50,9 @@ class Model
         return $this->Db->update((int)$id, $params);
     }
 
-    public function getEntitys($params = [])
+    public function getEntitys($params = [], $start = 0, $count = 0)
     {
-        return $this->Db->getRows($params);
+        return $this->Db->getRows($params, $start, $count);
     }
 
 }
