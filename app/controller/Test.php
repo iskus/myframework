@@ -32,34 +32,34 @@ class Test extends Controller {
         ini_set('max_execution_time', '0');
         error_reporting(E_ALL);
 
-//        $this->uniqueLinks();
+       // $this->uniqueLinks();
 
-        for ($i = 0; $i <= 1000; $i += 100) {
-            $model = new Model();
-            $model->setDbTable('links');
-            $links = $model->getEntitys([], $i, 100);
-            $model->setDbTable('info_cards');
-
-            foreach ($links as $link) {
-                $parser = new ParserYopta($link->link);
-                $titleBlock = $parser->pq->find('div#header > div.name');
-                $title = pq($titleBlock)->find('div.left')->text() . ' | '
-                    . pq($titleBlock)->find('div.actual')->text();
-                $obj = new \stdClass();
-                $obj->title = $title;
-                $rows = $parser->pq->find('div#container > div.row');
-                foreach ($rows as $row) {
-                    $prop = $fields[pq($row)->find('div.left')->text()];
-                    $value = pq($row)->find('div.right')->text();
-                    $obj->$prop = $value;
-                    //echo $prop . '  ' . $value . '<br/>';
-                }
-                var_dump($obj);
-                //echo '<br/>';
-                $model->addEntity($obj);
-            }
-           
-        }
+//        for ($i = 0; $i <= 1000; $i += 100) {
+//            $model = new Model();
+//            $model->setDbTable('links');
+//            $links = $model->getEntitys([], $i, 100);
+//            $model->setDbTable('info_cards');
+//
+//            foreach ($links as $link) {
+//                $parser = new ParserYopta($link->link);
+//                $titleBlock = $parser->pq->find('div#header > div.name');
+//                $title = pq($titleBlock)->find('div.left')->text() . ' | '
+//                    . pq($titleBlock)->find('div.actual')->text();
+//                $obj = new \stdClass();
+//                $obj->title = $title;
+//                $rows = $parser->pq->find('div#container > div.row');
+//                foreach ($rows as $row) {
+//                    $prop = $fields[pq($row)->find('div.left')->text()];
+//                    $value = pq($row)->find('div.right')->text();
+//                    $obj->$prop = $value;
+//                    //echo $prop . '  ' . $value . '<br/>';
+//                }
+//                var_dump($obj);
+//                //echo '<br/>';
+//                $model->addEntity($obj);
+//            }
+//
+//        }
 
 
 
@@ -70,6 +70,7 @@ class Test extends Controller {
     }
 
     public function uniqueLinks() {
+
         for ($i = 0; $i < 10; $i++) {
             $url = 'http://email.court.gov.ua/search?utf8=%E2%9C%93&term=' . $i . '&count_page=10';
 
@@ -78,12 +79,19 @@ class Test extends Controller {
             $model = new Model();
             $model->setDbTable('links');
 
-            foreach ($elements as $element) {
-
+            $links = ['replace' => true];
+            echo count($elements);
+            foreach ($elements as $key => $element) {
                 $obj = new \stdClass();
                 $obj->link = "http://email.court.gov.ua" . pq($element)->attr('href');
-                $obj->replace = true;
-                $model->addEntity($obj);
+                $links[] = $obj;
+                if (($key >= 100 && ($key % 100 == 0)) || (count($elements) - 1) == $key) {
+                    $model->addEntitys($links);
+                    $links = ['replace' => true];
+                }
+//                $obj->replace = true;
+//                $model->addEntity($obj);
+
                 //echo pq($element)->attr('href');
 //            $title = pq($element)->find('div.title > a');
 //            $title = pq($title)->text();

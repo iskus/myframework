@@ -35,7 +35,7 @@ class MysqlDbConnection extends \mysqli
             unset($objects['replace']);
             $inc = "REPLACE";
         }
-        $query = "{$inc} INTO {$this->table} (" . implode(',', get_object_vars($objects[0]))
+        $query = "{$inc} INTO {$this->table} (" . implode(',', array_keys(get_object_vars($objects[0])))
             . ") VALUES ";
         $values = [];
         foreach ($objects as $obj) {
@@ -45,9 +45,11 @@ class MysqlDbConnection extends \mysqli
             }
             $values[] = "('" . implode("','", $vars) . "')";
         }
-        $query .= implode("','", $values);
+        //var_dump($values);
+
+        $query .= implode(",", $values);
         echo $query;
-        //return $this->query($query);
+        return $this->query($query);
 
     }
 
