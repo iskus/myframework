@@ -48,8 +48,14 @@ class MysqlDbConnection extends \mysqli
         //var_dump($values);
 
         $query .= implode(",", $values);
-        echo $query;
-        return $this->query($query);
+        //echo $query;
+        try {
+            $this->query($query);
+        } catch (\Exception $e) {
+            echo $e->getMessage(); die;
+        }
+//        var_dump($this->query($query));die;
+//        return $this->query($query);
 
     }
 

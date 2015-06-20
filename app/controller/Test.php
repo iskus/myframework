@@ -14,11 +14,29 @@ use core\database\Db;
 use core\Model;
 use libs\ParserYopta;
 
+//CREATE TABLE `info_cards` (
+//`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+// `title` varchar(254) NOT NULL,
+// `edrpou` varchar(254) NOT NULL,
+// `email` varchar(254) NOT NULL,
+// `phone` varchar(254) NOT NULL,
+// `adress` varchar(254) NOT NULL,
+// `reg_adress` varchar(254) NOT NULL,
+// `face` varchar(254) NOT NULL,
+// `created` varchar(254) NOT NULL,
+// PRIMARY KEY (`id`)
+//) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
 class Test extends Controller {
+    public $fields,
+            $model;
 
-    public function index() {
+    public function __construct() {
 
-        $fields = [
+        ini_set('max_execution_time', '0');
+        error_reporting(E_ALL);
+
+        $this->fields = [
             'ЄДРПОУ:' => 'edrpou',
             'Адреса електронної пошти:' => 'email',
             'Номер факсу (телефаксу):' => 'phone',
@@ -29,54 +47,52 @@ class Test extends Controller {
             'title' => 'title',
         ];
 
-        ini_set('max_execution_time', '0');
-        error_reporting(E_ALL);
-
-       // $this->uniqueLinks();
-
-//        for ($i = 0; $i <= 1000; $i += 100) {
-//            $model = new Model();
-//            $model->setDbTable('links');
-//            $links = $model->getEntitys([], $i, 100);
-//            $model->setDbTable('info_cards');
-//
-//            foreach ($links as $link) {
-//                $parser = new ParserYopta($link->link);
-//                $titleBlock = $parser->pq->find('div#header > div.name');
-//                $title = pq($titleBlock)->find('div.left')->text() . ' | '
-//                    . pq($titleBlock)->find('div.actual')->text();
-//                $obj = new \stdClass();
-//                $obj->title = $title;
-//                $rows = $parser->pq->find('div#container > div.row');
-//                foreach ($rows as $row) {
-//                    $prop = $fields[pq($row)->find('div.left')->text()];
-//                    $value = pq($row)->find('div.right')->text();
-//                    $obj->$prop = $value;
-//                    //echo $prop . '  ' . $value . '<br/>';
-//                }
-//                var_dump($obj);
-//                //echo '<br/>';
-//                $model->addEntity($obj);
-//            }
-//
-//        }
-
-
-
+        $this->model = new Model();
     }
 
-    public function prepareInfo() {
+    public function index() {
 
+       // $this->uniqueLinks();
+        $this->getInfo();
+    }
+
+    public function getInfo() {
+
+        for ($i = 0; $i <= 1100; $i += 100) {
+            $this->model->setDbTable('links');
+            $links = $this->model->getEntitys([], $i, 100);
+            $this->model->setDbTable('info_cards');
+            $objects = [];
+            foreach ($links as $link) {
+                $parser = new ParserYopta($link->link);
+                $titleBlock = $parser->pq->find('div#header > div.name');
+                $title = pq($titleBlock)->find('div.left')->text() . ' | '
+                    . pq($titleBlock)->find('div.actual')->text();
+                $obj = new \stdClass();
+                $obj->title = $title;
+                $rows = $parser->pq->find('div#container > div.row');
+                foreach ($rows as $row) {
+                    $prop = $this->fields[pq($row)->find('div.left')->text()];
+                    $value = pq($row)->find('div.right')->text();
+                    $obj->$prop = $value;
+                    //echo $prop . '  ' . $value . '<br/>';
+                }
+                $objects[] = $obj;
+                //echo '<br/>';
+               // $this->model->addEntity($obj);
+            }
+            //var_dump(count($objects));die;
+            $this->model->addEntitys($objects);
+
+        }
     }
 
     public function uniqueLinks() {
-
         for ($i = 0; $i < 10; $i++) {
             $url = 'http://email.court.gov.ua/search?utf8=%E2%9C%93&term=' . $i . '&count_page=10';
 
             $parser = new ParserYopta($url);
             $elements = $parser->pq->find('div.name > a');
-            $model = new Model();
             $model->setDbTable('links');
 
             $links = ['replace' => true];
