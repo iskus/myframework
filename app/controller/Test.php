@@ -14,8 +14,8 @@ use core\database\Db;
 use core\Model;
 use libs\ParserYopta;
 
-//CREATE TABLE `info_cards` (
-//`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+// CREATE TABLE `info_cards` (
+// `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 // `title` varchar(254) NOT NULL,
 // `edrpou` varchar(254) NOT NULL,
 // `email` varchar(254) NOT NULL,
@@ -25,7 +25,7 @@ use libs\ParserYopta;
 // `face` varchar(254) NOT NULL,
 // `created` varchar(254) NOT NULL,
 // PRIMARY KEY (`id`)
-//) ENGINE=InnoDB DEFAULT CHARSET=latin1
+// ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
 class Test extends Controller {
     public $fields,
@@ -52,13 +52,13 @@ class Test extends Controller {
 
     public function index() {
 
-       // $this->uniqueLinks();
-        $this->getInfo();
+        $this->uniqueLinks();
+        // $this->getInfo();
     }
-
+/**  **/
     public function getInfo() {
 
-        for ($i = 0; $i <= 1100; $i += 100) {
+        for ($i = 0; $i <= 10100; $i += 100) {
             $this->model->setDbTable('links');
             $links = $this->model->getEntitys([], $i, 100);
             $this->model->setDbTable('info_cards');
@@ -93,7 +93,7 @@ class Test extends Controller {
 
             $parser = new ParserYopta($url);
             $elements = $parser->pq->find('div.name > a');
-            $model->setDbTable('links');
+            $this->model->setDbTable('links');
 
             $links = ['replace' => true];
             echo count($elements);
@@ -102,11 +102,12 @@ class Test extends Controller {
                 $obj->link = "http://email.court.gov.ua" . pq($element)->attr('href');
                 $links[] = $obj;
                 if (($key >= 100 && ($key % 100 == 0)) || (count($elements) - 1) == $key) {
-                    $model->addEntitys($links);
+                    $this->model->addEntitys($links);
                     $links = ['replace' => true];
+                    echo "1";
                 }
 //                $obj->replace = true;
-//                $model->addEntity($obj);
+//                $this->model->addEntity($obj);
 
                 //echo pq($element)->attr('href');
 //            $title = pq($element)->find('div.title > a');
