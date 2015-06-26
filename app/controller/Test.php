@@ -52,13 +52,13 @@ class Test extends Controller {
 
     public function index() {
 
-        $this->uniqueLinks();
-        // $this->getInfo();
+        //$this->uniqueLinks();
+         $this->getInfo();
     }
 /**  **/
     public function getInfo() {
 
-        for ($i = 0; $i <= 10100; $i += 100) {
+        for ($i = 100; $i <= 10100; $i += 100) {
             $this->model->setDbTable('links');
             $links = $this->model->getEntitys([], $i, 100);
             $this->model->setDbTable('info_cards');
@@ -77,12 +77,14 @@ class Test extends Controller {
                     $obj->$prop = $value;
                     //echo $prop . '  ' . $value . '<br/>';
                 }
-                $objects[] = $obj;
+                //$objects[] = $obj;
                 //echo '<br/>';
-               // $this->model->addEntity($obj);
+                $this->model->addEntity($obj);
+                echo '-- incert<br/>';
             }
             //var_dump(count($objects));die;
-            $this->model->addEntitys($objects);
+            //$this->model->addEntitys($objects);
+                echo '<br/>INSERT +100<br/>';
 
         }
     }
