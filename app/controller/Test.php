@@ -51,29 +51,75 @@ class Test extends Controller {
         error_reporting(E_ALL);
 
 /** определяем массив соответствия заголовка полю в таблице */
-        $this->fields = [
-            'ЄДРПОУ:' => 'edrpou',
-            'Адреса електронної пошти:' => 'email',
-            'Номер факсу (телефаксу):' => 'phone',
-            'Поштова адреса:' => 'adress',
-            'Юридична адреса:' => 'reg_adress',
-            'Відповідальна особа:' => 'face',
-            'Дата заповнення:' => 'created',
-            'title' => 'title',
-        ];
-
+//        $this->fields = [
+//            'ЄДРПОУ:' => 'edrpou',
+//            'Адреса електронної пошти:' => 'email',
+//            'Номер факсу (телефаксу):' => 'phone',
+//            'Поштова адреса:' => 'adress',
+//            'Юридична адреса:' => 'reg_adress',
+//            'Відповідальна особа:' => 'face',
+//            'Дата заповнення:' => 'created',
+//            'title' => 'title',
+//        ];
+        $this->parser = new ParserYopta();
         $this->model = new Model();
+        parent::__construct();
     }
 
 /** По хорошему сюда надо бы морду какую-то приделать.. */
 /** 
 TODO Приделать face 
 */
+
+
     public function index() {
-        if ($what = UsefulData::getRequest('what') == 'links') {
-            $this->getUniqueLinks();
-        } elseif ($what == 'info') {
-            $this->getInfoByLinks();
+        $this->getModelsByMarks();
+//        if ($what = UsefulData::getRequest('what') == 'links') {
+//            $this->getUniqueLinks();
+//        } elseif ($what == 'info') {
+//            $this->getInfoByLinks();
+//        }
+    }
+
+
+    public function getModelsByMarks() {
+        $this->model->setDbTable('marks');
+        $marks = $this->model->getEntitys();
+
+        foreach ($marks as $mark) {
+            echo $mark->name . '<br/>';
+        }
+    }
+
+
+    public function getModelsByMark() {
+        $this->model->setDbTable('models');
+        $models = $this->parser->pq->find('td.search_place > a');
+
+        foreach ($models as $model) {
+            echo $mark->name . '<br/>';
+        }
+    }
+
+    public function getMarks() {
+        $url = "http://tecdoc.autodoc.ru/";
+        $this->parser->setPage($url);
+
+        $elements = $this->parser->pq->find('a');
+        $this->model->setDbTable('marks');
+
+
+        foreach ($elements as $key => $element) {
+            $obj = new \stdClass();
+            $obj->link = pq($element)->attr('href');
+            $obj->name = pq($element)->text();
+            echo $obj->name .'<br/>';
+            $links[] = $obj;
+            if (($key >= 100 && ($key % 100 == 0)) || (count($elements) - 1) == $key) {
+                $this->model->addEntitys($links);
+                $links = [];
+            }
+
         }
     }
 

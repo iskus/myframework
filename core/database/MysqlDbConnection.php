@@ -10,6 +10,7 @@ class MysqlDbConnection extends \mysqli
 {
     public $table;
 
+
     public function insert(\stdClass $obj)
     {
         $values = [];
@@ -23,7 +24,7 @@ class MysqlDbConnection extends \mysqli
         }
         $query = "{$inc} INTO {$this->table} (" . implode(',', array_keys($values))
             . ") VALUES ('" . implode("','", $values) . "')";
-        //echo $query;
+        echo $query;
         return $this->query($query);
 
     }
@@ -47,8 +48,7 @@ class MysqlDbConnection extends \mysqli
         }
         //var_dump($values);
 
-        $query .= implode(",", $values);
-        //echo $query;
+        $query .= implode(",", $values);echo $query;
         try {
             $this->query($query);
         } catch (\Exception $e) {

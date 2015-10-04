@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 define('PATH_TO_ROOT', str_replace('\\', '/', realpath(dirname(__FILE__))));
 define('APP_FOLDER', 'app');
 define('PATH_TO_APP', PATH_TO_ROOT . '/' . APP_FOLDER . '/');

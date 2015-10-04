@@ -30,12 +30,17 @@ class DbConnection
      */
     private function mysqlConnect()
     {
-        return new MysqlDbConnection(
+        $mysql = new MysqlDbConnection(
             $this->config->host,
             $this->config->user,
             $this->config->pass,
             $this->config->db
         );
+
+        $mysql->set_charset('utf8');
+        //$this->character_set_name();
+
+        return $mysql;
     }
 
     private function mongoConnect()
